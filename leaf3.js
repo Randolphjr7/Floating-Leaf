@@ -3,6 +3,9 @@
   const myCanvas = document.getElementById("the-canvas");
   const ctx = myCanvas.getContext("2d");
 
+  const audio = new Audio('rebelution.mp3');
+  audio.play();
+
   /////////////////////////////////////////////////////////////////
   /////////////////// Classes Section /////////////////////////////
   /////////////////////////////////////////////////////////////////
@@ -80,12 +83,14 @@
       this.y = y;
       this.width = width;
       this.height = height;
+      this.img = "./images/cop.png";
     }
     
     // draw the obstacle
     drawObstacles(){
-      ctx.fillStyle = "red";
-      ctx.fillRect(this.x, this.y, this.width, this.height);
+      const copImg = new Image();
+      copImg.src = this.img;
+      ctx.drawImage(copImg, this.x, this.y, this.width, this.height);
     }
     
     // move obstacle left
