@@ -3,28 +3,20 @@ body {
   text-align: center;
 }
 
-.game-intro {
+.game-ending {
   float: center;
   padding: 0% 10%;
 }
 
-.game-intro p {
+.game-ending p {
   font-size: 18px;
   font-family: "Verdana";
 }
 
 .logo-img {
-  margin-top: 70px;
-  margin-bottom: 70px;
-  width: 350px;
-}
-
-canvas {
-  border: 1px solid red;
-}
-
-.logo-img {
-  width: 350px;
+  margin-top: 76px;
+  margin-bottom: 59px;
+  width: 450px;
 }
 
 body button {
@@ -36,11 +28,4 @@ body button {
   box-shadow: 0;
   border-radius: 5px;
   margin-bottom: 20px;
-}
-
-#game-board {
-  float: left;
-  background-image: url("./images/houses.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
 }

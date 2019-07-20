@@ -103,30 +103,6 @@
 
   }
   
-////////////////////////the building class////////////////////////////
-  class buildings {
-
-    constructor(x,y,width,height, image){
-      this.x = 850;
-      this.y = y;
-      this.width = width;
-      this.height = height;
-      this.img = image;
-    }
-
-    // draw building
-    drawBuilding(){
-      const buildingImg = new Image();
-      buildingImg.src = this.img;
-      ctx.drawImage(buildingImg, this.x, this.y, this.width, this.height);
-    }
-
-    // move building left
-    moveLeft(){
-      this.x -= 10;
-    }
-  }
-
 //////////////////////////the bird class////////////////////////////
   class Bird {
     
@@ -149,9 +125,18 @@
     moveLeft(){
       this.x -= 10;
     }
-  }           
 
-////////////////////////////the Game class/////////////////////////////
+    birdVertexXcoord(){
+      return this.x + (.5 * this.width);
+    }
+  
+    birdVertexYcoord(){
+      return this.y + (.5 * this.height);
+    }
+
+  } 
+
+////////////////////////////the Game class///////////////////////////////
   class Game {
 
     constructor(){
@@ -184,10 +169,24 @@
     currentLeaf.accelerate(down);
   }
 
-  /////////////////////////////////add score/////////////////////////////
+  /////////////////////////////////add score////////////////////////////////
   let newScore = 0;
+  let score = document.getElementById('score');
   function addScore(){
+    
     newScore++;
+    score.innerHTML = newScore;
+    return;
+  }
+
+  /////////////////////////go to Game Over Page//////////////////////////////
+  function gameOver(){
+    window.location.href = "youLose.html";
+  }
+
+  //////////////////////////go to You win Page///////////////////////////////
+  function youWin(){
+    window.location.href = "youWin.html";
   }
   
   
@@ -197,7 +196,7 @@
   currentGame.leaf = currentLeaf;
   
   
-  ///////////////////////////the animation loop//////////////////////////
+  ///////////////////////////the animation loop//////////////////////////////
   let frames = 0;
   function refresh(){
     
@@ -246,7 +245,7 @@
       
       currentGame.skyscrapers[i].moveLeft();
       
-      //////////////////////////detect collision/////////////////////////////
+      //////////////////////////detect collision///////////////////////////////////////
   
         const leafVertexX = currentLeaf.leafVertexXcoord();
         const leafVertexY = currentLeaf.leafVertexYcoord();
@@ -276,17 +275,25 @@
           } 
           return false;
         }
-
-        if((xCollision()) && (yCollision())){
-          console.log("BOOOOOOOOOM!!!!");
-        }
         
+        function collission(){
+          if((xCollision()) && (yCollision())){
+            console.log("BOOOOOOOOOM!!!!");
+            gameOver();
+          }
+        } 
+
+        collission();
+
       ////////////////////////////////////////////////////////////////////////////////
 
       currentGame.skyscrapers[i].drawObstacles();
 
       if(currentGame.skyscrapers[i].x + currentGame.skyscrapers[i].width < 0){
-
+        addScore();
+        if(newScore === 20){
+           youWin();
+        }
         currentGame.skyscrapers.shift();
       }
     }
@@ -296,7 +303,50 @@
     for(let k = 0; k < currentGame.birds.length; k++){
 
       currentGame.birds[k].moveLeft();
+
+      //////////////////////////detect collision/////////////////////////////////////
+      const leafVertexX = currentLeaf.leafVertexXcoord();
+      const leafVertexY = currentLeaf.leafVertexYcoord();
+      const birdVertexX = currentGame.birds[k].birdVertexXcoord();
+      const birdVertxY = currentGame.birds[k].birdVertexYcoord();
+
+      let vertexWidth = Math.abs(leafVertexX - birdVertexX).toFixed(2);
+      let vertexHeight = Math.abs(leafVertexY - birdVertxY).toFixed(2);
+
+      function xCollision(){
+        if(vertexWidth < ((.5 * currentLeaf.width) + (.5 * currentGame.birds[k].width))){
+          console.log("X collission!");
+          return true;
+        }
+        return false;
+      }
+
+      function yCollision(){
+          
+        if(vertexHeight < ((.5 * currentLeaf.height) + (.5 * currentGame.birds[k].height))){
+          console.log("Y collision!");
+          return true;
+        } 
+        return false;
+      }
+
+      function collission(){
+        if((xCollision()) && (yCollision())){
+          console.log("BOOOOOOOOOM!!!!");
+          gameOver();
+        }
+      } 
+
+      collission();
+
+      /////////////////////////////////////////////////////////////////////////////////
+
       currentGame.birds[k].drawBird();
+
+      if(currentGame.birds[k].x + currentGame.birds[k].width < 0){
+        addScore();
+        currentGame.birds.shift();
+      }
     }  
     
     // loop again
