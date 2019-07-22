@@ -40,7 +40,7 @@ body button {
 
 #game-board {
   float: left;
-  background-image: url("./images/houses.jpg");
+  background-image: url("../images/houses.jpg");
   background-repeat: no-repeat;
   background-size: cover;
 }
