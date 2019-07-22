@@ -4,8 +4,18 @@
   const ctx = myCanvas.getContext("2d");
 
   const audio = new Audio("../music/rebelution.mp3");
-  audio.play();
+  const sound = new Audio("../music/jump.wav");
 
+  //audio.play();
+
+
+  sound.preload = 'auto';
+  sound.load();
+
+function playSound() {
+  let click=sound.cloneNode();
+  click.play();
+}
   /////////////////////////////////////////////////////////////////
   /////////////////// Classes Section /////////////////////////////
   /////////////////////////////////////////////////////////////////
@@ -110,7 +120,15 @@
 		super(myCanvas.width + 200,y,80,80,"../images/funnyRaven.png");
     }
     
-  } 
+  }
+
+///////////////////////////the Cheetos Class/////////////////////////////
+  class Cheetos extends Obstacles {
+
+    constructor(y){
+      super(myCanvas.width + 200, y, 80, 80, "../images/cheetos.png");
+    }
+  }  
 
 ////////////////////////////the Cop class///////////////////////////////
   class Cop extends Obstacles{
@@ -127,6 +145,7 @@
       this.skyscrapers = [];
       this.cops = [];
       this.birds = [];
+      this.goodies = [];
       this.score = 0;
     }
   }
@@ -138,6 +157,8 @@
     const jump = -.5;
     
     if(up ===32){
+	  // play up sound effect
+	  playSound();
       // if currentLeaf has not hit the top then jump
       if(!currentLeaf.hitTop()){
         currentLeaf.accelerate(jump);
@@ -192,105 +213,175 @@
 
     frames++;
 	
-	// every 150 frames
+	  // every 150 frames
+	  if(newScore > 30){
 
-	if(newScore > 10){
-
-		if(frames % 150 === 1){
-		  
-		  // create bird object
-		  randomBirdY = Math.floor(Math.random() * 650);
-		  let currentBird = new Bird(randomBirdY);
-		  currentGame.birds.push(currentBird);
-		  
-		}
-	}
-	
-	if(newScore > 20){
-
-		if(frames % 115 === 1){
-			// create cop 
-			randomCopY = Math.floor(Math.random() * 650);
-			let currentCop = new Cop(randomCopY);
-			currentGame.cops.push(currentCop);
-		}
-
-	}
-	
-
-	// iterate through the array of cops; move cop left and draw
-	for(let k = 0; k < currentGame.cops.length; k++){
-
-			currentGame.cops[k].moveLeft();
-	
-			//////////////////////////detect collision/////////////////////////////////////
-			const leafVertexX = currentLeaf.vertexXcoord();
-			const leafVertexY = currentLeaf.vertexYcoord();
-			const copVertexX = currentGame.cops[k].vertexXcoord();
-			const copVertxY = currentGame.cops[k].vertexYcoord();
-	
-			let vertexWidth = Math.abs(leafVertexX - copVertexX).toFixed(2);
-			let vertexHeight = Math.abs(leafVertexY - copVertxY).toFixed(2);
-	
-			function xCollision(){
-			if(vertexWidth < ((.5 * currentLeaf.width) + (.5 * currentGame.cops[k].width))){
-				console.log("X collission!");
-				return true;
-			}
-			return false;
-			}
-	
-			function yCollision(){
-				
-			if(vertexHeight < ((.5 * currentLeaf.height) + (.5 * currentGame.cops[k].height))){
-				console.log("Y collision!");
-				return true;
-			} 
-			return false;
-			}
-	
-			function collission(){
-			if((xCollision()) && (yCollision())){
-				console.log("BOOOOOOOOOM!!!!");
-				gameOver();
-			}
-			} 
-	
-			collission();
-	
-			/////////////////////////////////////////////////////////////////////////////////
-	
-			currentGame.cops[k].draw();
-	
-			if(currentGame.cops[k].x + currentGame.cops[k].width < 0){
-			addScore();
-			currentGame.cops.shift();
-			}
-		}  
-
-	
-	
-	// create building object
-    if (frames % 100 === 1){
-      
-      // create min & max for specific obstacle range
-      let min = 500;
-      let max = 525;
-      
-      // randomize parameters for obstacle object 
-      obstacleX = myCanvas.width;
-      let randomY = Math.floor(Math.random() * (max - min + 1)) + min;
-      
-      obstacleWidth = 100;
-      obstacleHeight = myCanvas.height - randomY;
-      
-      let obstacle = new Building (obstacleX, randomY, obstacleWidth, obstacleHeight); 
-      
-      // push array
-      currentGame.skyscrapers.push(obstacle);
-      
+      if(frames % 150 === 1){
+        
+        // create bird object
+        randomBirdY = Math.floor(Math.random() * 650);
+        let currentBird = new Bird(randomBirdY);
+        currentGame.birds.push(currentBird);
+        
+      }
     }
     
+  
+
+   if(frames % 125 === 1){
+     // create cheetos or sprite can
+     randomCheetosY = Math.floor(Math.random() * 650);
+     let currentCheetos = new Cheetos(randomCheetosY);
+     currentGame.goodies.push(currentCheetos);
+    }
+
+  
+    
+    // create building object
+    if(newScore > 15){
+
+      if (frames % 100 === 1){
+        
+        // create min & max for specific obstacle range
+        let min = 350;
+        let max = 525;
+        
+        // randomize parameters for obstacle object 
+        obstacleX = myCanvas.width;
+        let randomY = Math.floor(Math.random() * (max - min + 1)) + min;
+        console.log(randomY);
+        
+        obstacleWidth = 100;
+        obstacleHeight = myCanvas.height - randomY;
+        
+        let obstacle = new Building (obstacleX, randomY, obstacleWidth, obstacleHeight); 
+        
+        // push array
+        currentGame.skyscrapers.push(obstacle);
+        
+      }
+    }
+    
+    // next level
+    if(newScore > 40){
+
+      if(frames % 175 === 1){
+        // create cop 
+        randomCopY = Math.floor(Math.random() * 650);
+        let currentCop = new Cop(randomCopY);
+        currentGame.cops.push(currentCop);
+      }
+      
+    }
+
+    // iterate through the array of goodies; move cheeto left and draw
+    for(let k = 0; k < currentGame.goodies.length; k++){
+
+        currentGame.goodies[k].moveLeft();
+      
+        //////////////////////////detect collision/////////////////////////////////////
+        const leafVertexX = currentLeaf.vertexXcoord();
+        const leafVertexY = currentLeaf.vertexYcoord();
+        const cheetoVertexX = currentGame.goodies[k].vertexXcoord();
+        const cheetoVertexY = currentGame.goodies[k].vertexYcoord();
+      
+        let vertexWidth = Math.abs(leafVertexX - cheetoVertexX).toFixed(2);
+        let vertexHeight = Math.abs(leafVertexY - cheetoVertexY).toFixed(2);
+      
+        function xCollision(){
+          if(vertexWidth < ((.5 * currentLeaf.width) + (.5 * currentGame.goodies[k].width))){
+            console.log("cheeto X!");
+            return true;
+          }
+          return false;
+        }
+      
+        function yCollision(){
+            
+        if(vertexHeight < ((.5 * currentLeaf.height) + (.5 * currentGame.goodies[k].height))){
+            console.log("cheeto Y!");
+            return true;
+          } 
+          return false;
+        }
+      
+        function collission(){
+          if((xCollision()) && (yCollision())){
+            console.log("CHEETOOOOOOOOS!!!!");
+            addScore();
+            currentGame.goodies.shift();
+        
+          }
+        } 
+      
+        collission();
+      
+        /////////////////////////////////////////////////////////////////////////////////
+        
+        if(currentGame.goodies[k] !== undefined){
+          
+          currentGame.goodies[k].draw();
+          if(currentGame.goodies[k].x + currentGame.goodies[k].width < 0){
+            currentGame.goodies.shift();
+          }
+
+        }
+      
+    }  
+	
+
+    // iterate through the array of cops; move cop left and draw
+    for(let k = 0; k < currentGame.cops.length; k++){
+
+        currentGame.cops[k].moveLeft();
+    
+        //////////////////////////detect collision/////////////////////////////////////
+        const leafVertexX = currentLeaf.vertexXcoord();
+        const leafVertexY = currentLeaf.vertexYcoord();
+        const copVertexX = currentGame.cops[k].vertexXcoord();
+        const copVertxY = currentGame.cops[k].vertexYcoord();
+    
+        let vertexWidth = Math.abs(leafVertexX - copVertexX).toFixed(2);
+        let vertexHeight = Math.abs(leafVertexY - copVertxY).toFixed(2);
+    
+        function xCollision(){
+        if(vertexWidth < ((.5 * currentLeaf.width) + (.5 * currentGame.cops[k].width))){
+          console.log("X collission!");
+          return true;
+        }
+        return false;
+        }
+    
+        function yCollision(){
+          
+        if(vertexHeight < ((.5 * currentLeaf.height) + (.5 * currentGame.cops[k].height))){
+          console.log("Y collision!");
+          return true;
+        } 
+        return false;
+        }
+    
+        function collission(){
+          if((xCollision()) && (yCollision())){
+            console.log("BOOOOOOOOOM!!!!");
+            gameOver();
+          }
+        } 
+    
+        collission();
+    
+        /////////////////////////////////////////////////////////////////////////////////
+    
+        currentGame.cops[k].draw();
+    
+        if(currentGame.cops[k].x + currentGame.cops[k].width < 0){
+        addScore();
+        currentGame.cops.shift();
+        }
+    }  
+
+	
+	
     
     // iterate through the array of skycrapers; move objects/skyscrapers left and draw
     for(let i = 0; i < currentGame.skyscrapers.length; i++){
@@ -341,11 +432,12 @@
       if(currentGame.skyscrapers[i].x + currentGame.skyscrapers[i].width < 0){
         addScore();
         currentGame.skyscrapers.shift();
-	}
-}
+      }
+      
+    }
 
 
-// iterate through the array of birds; move objects/birds left and draw
+    // iterate through the array of birds; move objects/birds left and draw
     for(let k = 0; k < currentGame.birds.length; k++){
 		
       currentGame.birds[k].moveLeft();
@@ -390,15 +482,16 @@
       currentGame.birds[k].draw();
 	  
       if(currentGame.birds[k].x + currentGame.birds[k].width < 0){
-		addScore();
+		    addScore();
         currentGame.birds.shift();
-	}
-}  
+      }
+      
+    }  
 
-	// win condition
-	if(newScore > 50){
-	youWin();
-	}
+    // win condition
+    if(newScore > 150){
+    youWin();
+    }
 
 // loop again
 requestAnimationFrame(refresh);
