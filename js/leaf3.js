@@ -113,7 +113,7 @@
   class Building extends Obstacles {
     
     constructor(x,y,width,height){
-		super(x,y,width,height, "../images/green.png");
+		super(x,y,width,height, "../images/trump2.png");
     }
     
 
@@ -123,7 +123,7 @@
   class Bird extends Obstacles {
     
     constructor(y,width, height){
-		super(myCanvas.width + 200,y,80,80,"../images/funnyRaven.png");
+		super(myCanvas.width + 200,y,80,80,"../images/trumpTweet.png");
     }
     
   }
@@ -139,7 +139,7 @@
 ////////////////////////////the Cop class///////////////////////////////
   class Cop extends Obstacles{
 	constructor(y){
-		super(myCanvas.width + 200,y,80,100,"../images/cop.png");
+		super(myCanvas.width + 200,y,100,120,"../images/trumpRocket.png");
 	}
   }
 
@@ -237,7 +237,7 @@
 
     if(frames % 125 === 1){
      // create cheetos or sprite can
-      randomCheetosY = Math.floor(Math.random() * 630);
+      randomCheetosY = Math.floor(Math.random() * 620);
 
       console.log("cheetos.y = ", randomCheetosY);
       let currentCheetos = new Cheetos(randomCheetosY);
@@ -256,11 +256,11 @@
         let max = 525;
         
         // randomize parameters for obstacle object 
-        obstacleX = myCanvas.width;
+        obstacleX = myCanvas.width + 200;
         let randomY = Math.floor(Math.random() * (max - min + 1)) + min;
         console.log(randomY);
         
-        obstacleWidth = 100;
+        obstacleWidth = 180;
         obstacleHeight = myCanvas.height - randomY;
         
         let obstacle = new Building (obstacleX, randomY, obstacleWidth, obstacleHeight); 
