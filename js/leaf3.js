@@ -3,19 +3,26 @@
   const myCanvas = document.getElementById("the-canvas");
   const ctx = myCanvas.getContext("2d");
 
-  const audio = new Audio("../music/rebelution.mp3");
-  const sound = new Audio("../music/jump.wav");
+  
+  const scoreSound = new Audio("../music/score.mp3");
+  const jumpSound = new Audio("../music/jump.wav");
 
-  //audio.play();
 
+  scoreSound.preload = 'auto';
+  scoreSound.load();
 
-  sound.preload = 'auto';
-  sound.load();
+  jumpSound.preload = `auto`;
+  jumpSound.load();
 
-function playSound() {
-  let click=sound.cloneNode();
-  click.play();
-}
+  function playJumpSound(){
+    let blah = jumpSound.cloneNode();
+    blah.play()
+  }
+
+  function playScoreSound() {
+    let click = scoreSound.cloneNode();
+    click.play();
+  }
   /////////////////////////////////////////////////////////////////
   /////////////////// Classes Section /////////////////////////////
   /////////////////////////////////////////////////////////////////
@@ -81,8 +88,7 @@ function playSound() {
     // check if it hits bottom
     hitBottom() {
       if(this.y > (this.bottom - this.height)){
-        this.y = (this.bottom - this.height);
-        this.gravitySpeed = 0;
+        gameOver();
       }
     }
     
@@ -158,7 +164,7 @@ function playSound() {
     
     if(up ===32){
 	  // play up sound effect
-	  playSound();
+	  playJumpSound();
       // if currentLeaf has not hit the top then jump
       if(!currentLeaf.hitTop()){
         currentLeaf.accelerate(jump);
@@ -180,6 +186,7 @@ function playSound() {
     
     newScore++;
     score.innerHTML = newScore;
+    playScoreSound();
     return;
   }
 
@@ -214,12 +221,12 @@ function playSound() {
     frames++;
 	
 	  // every 150 frames
-	  if(newScore > 15){
+	  if(newScore > 14){
 
       if(frames % 150 === 1){
         
         // create bird object
-        randomBirdY = Math.floor(Math.random() * 650);
+        randomBirdY = Math.floor(Math.random() * 640);
         let currentBird = new Bird(randomBirdY);
         currentGame.birds.push(currentBird);
         
@@ -228,17 +235,19 @@ function playSound() {
     
   
 
-   if(frames % 125 === 1){
+    if(frames % 125 === 1){
      // create cheetos or sprite can
-     randomCheetosY = Math.floor(Math.random() * 650);
-     let currentCheetos = new Cheetos(randomCheetosY);
-     currentGame.goodies.push(currentCheetos);
+      randomCheetosY = Math.floor(Math.random() * 630);
+
+      console.log("cheetos.y = ", randomCheetosY);
+      let currentCheetos = new Cheetos(randomCheetosY);
+      currentGame.goodies.push(currentCheetos);
     }
 
   
     
     // create building object
-    if(newScore > 5){
+    if(newScore > 4){
 
       if (frames % 100 === 1){
         
@@ -263,7 +272,7 @@ function playSound() {
     }
     
     // next level
-    if(newScore > 20){
+    if(newScore > 9){
 
       if(frames % 175 === 1){
         // create cop 
@@ -290,7 +299,7 @@ function playSound() {
       
         function xCollision(){
           if(vertexWidth < ((.5 * currentLeaf.width) + (.5 * currentGame.goodies[k].width))){
-            console.log("cheeto X!");
+         
             return true;
           }
           return false;
@@ -299,13 +308,14 @@ function playSound() {
         function yCollision(){
             
         if(vertexHeight < ((.5 * currentLeaf.height) + (.5 * currentGame.goodies[k].height))){
-            console.log("cheeto Y!");
+        
             return true;
           } 
           return false;
         }
       
         function collission(){
+
           if((xCollision()) && (yCollision())){
             console.log("CHEETOOOOOOOOS!!!!");
             addScore();
@@ -346,7 +356,7 @@ function playSound() {
     
         function xCollision(){
         if(vertexWidth < ((.5 * currentLeaf.width) + (.5 * currentGame.cops[k].width))){
-          console.log("X collission!");
+         
           return true;
         }
         return false;
@@ -355,7 +365,7 @@ function playSound() {
         function yCollision(){
           
         if(vertexHeight < ((.5 * currentLeaf.height) + (.5 * currentGame.cops[k].height))){
-          console.log("Y collision!");
+         
           return true;
         } 
         return false;
@@ -363,7 +373,7 @@ function playSound() {
     
         function collission(){
           if((xCollision()) && (yCollision())){
-            console.log("BOOOOOOOOOM!!!!");
+       
             gameOver();
           }
         } 
@@ -401,7 +411,7 @@ function playSound() {
 		
         function xCollision(){
           if(vertexWidth < ((.5 * currentLeaf.width) + (.5 * currentGame.skyscrapers[i].width))){
-            console.log("X collission!");
+         
             return true;
           }
           return false;
@@ -410,7 +420,7 @@ function playSound() {
         function yCollision(){
           
           if(vertexHeight < ((.5 * currentLeaf.height) + (.5 * currentGame.skyscrapers[i].height))){
-            console.log("Y collision!");
+            
             return true;
           } 
           return false;
@@ -430,7 +440,7 @@ function playSound() {
       currentGame.skyscrapers[i].draw();
 
       if(currentGame.skyscrapers[i].x + currentGame.skyscrapers[i].width < 0){
-        //addScore();
+
         currentGame.skyscrapers.shift();
       }
       
@@ -453,7 +463,7 @@ function playSound() {
 	  
       function xCollision(){
 		  if(vertexWidth < ((.5 * currentLeaf.width) + (.5 * currentGame.birds[k].width))){
-          console.log("X collission!");
+        
           return true;
         }
         return false;
@@ -462,7 +472,7 @@ function playSound() {
       function yCollision(){
           
 		  if(vertexHeight < ((.5 * currentLeaf.height) + (.5 * currentGame.birds[k].height))){
-			  console.log("Y collision!");
+	
 			  return true;
 			} 
 			return false;
