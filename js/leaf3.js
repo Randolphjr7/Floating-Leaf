@@ -88,8 +88,8 @@ function playSound() {
     
     // check if it hits top
     hitTop(){
-      if(this.y < (5)){
-        this.y = (5);
+      if(this.y < 1){
+        this.y = 1;
         return true;
       }
       return false;
@@ -214,7 +214,7 @@ function playSound() {
     frames++;
 	
 	  // every 150 frames
-	  if(newScore > 30){
+	  if(newScore > 15){
 
       if(frames % 150 === 1){
         
@@ -238,7 +238,7 @@ function playSound() {
   
     
     // create building object
-    if(newScore > 15){
+    if(newScore > 5){
 
       if (frames % 100 === 1){
         
@@ -263,7 +263,7 @@ function playSound() {
     }
     
     // next level
-    if(newScore > 40){
+    if(newScore > 20){
 
       if(frames % 175 === 1){
         // create cop 
@@ -319,7 +319,7 @@ function playSound() {
         /////////////////////////////////////////////////////////////////////////////////
         
         if(currentGame.goodies[k] !== undefined){
-          
+
           currentGame.goodies[k].draw();
           if(currentGame.goodies[k].x + currentGame.goodies[k].width < 0){
             currentGame.goodies.shift();
@@ -375,7 +375,7 @@ function playSound() {
         currentGame.cops[k].draw();
     
         if(currentGame.cops[k].x + currentGame.cops[k].width < 0){
-        addScore();
+        //addScore();
         currentGame.cops.shift();
         }
     }  
@@ -430,7 +430,7 @@ function playSound() {
       currentGame.skyscrapers[i].draw();
 
       if(currentGame.skyscrapers[i].x + currentGame.skyscrapers[i].width < 0){
-        addScore();
+        //addScore();
         currentGame.skyscrapers.shift();
       }
       
@@ -482,14 +482,14 @@ function playSound() {
       currentGame.birds[k].draw();
 	  
       if(currentGame.birds[k].x + currentGame.birds[k].width < 0){
-		    addScore();
+		    //addScore();
         currentGame.birds.shift();
       }
       
     }  
 
     // win condition
-    if(newScore > 150){
+    if(newScore > 25){
     youWin();
     }
 
