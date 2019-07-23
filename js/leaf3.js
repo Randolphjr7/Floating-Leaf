@@ -6,6 +6,7 @@
   
   const scoreSound = new Audio("../music/score.mp3");
   const jumpSound = new Audio("../music/jump.wav");
+  const falling = new Audio("../music/falling.mp3");
 
 
   scoreSound.preload = 'auto';
@@ -14,9 +15,10 @@
   jumpSound.preload = `auto`;
   jumpSound.load();
 
+
   function playJumpSound(){
     let blah = jumpSound.cloneNode();
-    blah.play()
+    blah.play();
   }
 
   function playScoreSound() {
@@ -176,6 +178,7 @@
   // when there are no keystrokes
   document.onkeyup = function () {
     let down = .2;
+    fall();
     currentLeaf.accelerate(down);
   }
 
