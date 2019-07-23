@@ -178,7 +178,6 @@
   // when there are no keystrokes
   document.onkeyup = function () {
     let down = .2;
-    fall();
     currentLeaf.accelerate(down);
   }
 
