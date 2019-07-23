@@ -278,7 +278,7 @@
 
       if(frames % 175 === 1){
         // create cop 
-        randomCopY = Math.floor(Math.random() * 650);
+        randomCopY = Math.floor(Math.random() * 630);
         let currentCop = new Cop(randomCopY);
         currentGame.cops.push(currentCop);
       }

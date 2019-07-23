@@ -19,9 +19,9 @@ body {
   width: 350px;
 }
 
-canvas {
+/* canvas {
   border: 1px solid red;
-}
+} */
 
 .logo-img {
   width: 350px;
@@ -39,7 +39,7 @@ body button {
 }
 
 #game-board {
-  float: left;
+  float: center;
   background-image: url("../images/houses.jpg");
   background-repeat: no-repeat;
   background-size: cover;
