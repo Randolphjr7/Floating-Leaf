@@ -40,14 +40,14 @@
 		this.image = image;
 	  }
 
-	// draw obstacle
+	  // draw obstacle
 	  draw(){
 		const someImg = new Image();
 		someImg.src = this.image;
 		ctx.drawImage(someImg, this.x, this.y, this.width, this.height);
 	  	}
 	
-	// return X coordinate
+  	// return X coordinate
 	  vertexXcoord(){
 		return this.x + (.5 * this.width);
 	  	}
@@ -57,10 +57,15 @@
 		  return this.y + (.5 * this.height);
 		}
 
-	// move obstacle left
+	  // move obstacle left
 	  moveLeft(){
 		  this.x -= 10; 
-		}
+    }
+    
+    // move right
+    moveRight(){
+      this.x += 10;
+    }
 
   }
 
@@ -68,7 +73,7 @@
   class Leaf extends Obstacles {
     
     constructor(){
-		super(15,250,50,80,"../images/mari2.png");
+		super(50,80,50,80,"../images/mari2.png");
 		this.speedX = 0;
 		this.speedY = 0;
 		this.gravity = 0.5;
@@ -81,7 +86,7 @@
     // gravity stuff
     gravityEffect(){
         this.hitTop();
-    	this.gravitySpeed += this.gravity;
+    	  this.gravitySpeed += this.gravity;
       	this.y += this.speedY + this.gravitySpeed;
       	this.hitBottom();
       
@@ -89,15 +94,31 @@
     
     // check if it hits bottom
     hitBottom() {
-      if(this.y > (this.bottom - this.height)){
-        gameOver();
+      if((this.y + this.height) > (this.bottom)){
+         gameOver();
       }
     }
     
     // check if it hits top
     hitTop(){
-      if(this.y < 1){
+      if(this.y <= 1){
         this.y = 1;
+        return true;
+      }
+      return false;
+    }
+
+    hitLeft(){
+      if(this.x <= 1){
+        this.x = 1;
+        return true;
+      }
+      return false;
+    }
+
+    hitRight(){
+      if(this.x + this.width >= myCanvas.length){
+        this.x = myCanvas.length - this.width;
         return true;
       }
       return false;
@@ -107,6 +128,22 @@
     accelerate(n){
       this.gravity = n;
     }
+
+    // move leaf left
+	  moveWeedLeft(){
+      if(!this.hitLeft()){
+        this.x -= 50; 
+      }
+
+    }
+    
+    // move leaf right
+    moveWeedRight(){
+      if(!this.hitRight()){
+        this.x += 50;
+      }
+    }
+
 
     
   }
@@ -118,16 +155,24 @@
 		super(x,y,width,height, "../images/trump2.png");
     }
     
-
   }
   
-//////////////////////////the bird class////////////////////////////////
+  //////////////////////////the bird class////////////////////////////////
   class Bird extends Obstacles {
     
     constructor(y,width, height){
-		super(myCanvas.width + 200,y,80,80,"../images/trumpTweet.png");
+      super(myCanvas.width + 200,y,80,80,"../images/trumpTweet.png");
     }
     
+  }
+  
+  ////////////////////the obama class////////////////////////////////////
+  class Obama extends Obstacles {
+    
+    constructor(x,y){
+      super(x,y,25,40,"../images/obama.png");
+    }
+
   }
 
 ///////////////////////////the Cheetos Class/////////////////////////////
@@ -154,33 +199,55 @@
       this.cops = [];
       this.birds = [];
       this.goodies = [];
+      this.obamas = [];
       this.score = 0;
     }
   }
-
+  
+  
   // listen for keystrokes
   document.onkeydown = function (e) {
     
     const up = e.keyCode;
-    const jump = -.5;
+    console.log("e.keycode is: ", up);
+    const jump = -.55;
     
-    if(up ===32){
-	  // play up sound effect
-	  playJumpSound();
-      // if currentLeaf has not hit the top then jump
-      if(!currentLeaf.hitTop()){
-        currentLeaf.accelerate(jump);
+    // go vertical 
+    if(up === 32){
+        // play up sound effect
+        playJumpSound();
+        // if currentLeaf has not hit the top then jump
+        if(!currentLeaf.hitTop()){
+          currentLeaf.accelerate(jump);
+        }
       }
-	}
-	
-  }
-  
-  // when there are no keystrokes
-  document.onkeyup = function () {
-    let down = .2;
+      
+      // go left
+      if(up === 37){
+        
+        // if leaf has not hit top then
+        if(!currentLeaf.hitTop()){
+          currentLeaf.moveWeedLeft();
+        }
+      }
+      
+      // go right
+      if(up === 39){
+        
+        // if leaf has not hit top then
+        if(!currentLeaf.hitTop()){
+          currentLeaf.moveWeedRight();
+        }
+      }
+    }
+    
+    
+    // when there are no keystrokes
+    document.onkeyup = function () {
+      let down = .1;
     currentLeaf.accelerate(down);
   }
-
+  
   /////////////////////////////////add score////////////////////////////////
   let newScore = 0;
   let score = document.getElementById('score');
@@ -191,12 +258,12 @@
     playScoreSound();
     return;
   }
-
+  
   /////////////////////////go to Game Over Page//////////////////////////////
   function gameOver(){
     window.location.href = "../html/youLose.html";
   }
-
+  
   //////////////////////////go to You win Page///////////////////////////////
   function youWin(){
     window.location.href = "../html/youWin.html";
@@ -207,6 +274,7 @@
   const currentGame = new Game();
   const currentLeaf = new Leaf();
   currentGame.leaf = currentLeaf;
+
   
   
   ///////////////////////////the animation loop//////////////////////////////
