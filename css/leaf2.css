@@ -3,6 +3,10 @@ body {
   text-align: center;
 }
 
+pre {
+  display: none;
+}
+
 .game-intro {
   float: center;
   padding: 0% 10%;
