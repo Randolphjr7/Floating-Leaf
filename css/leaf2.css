@@ -13,15 +13,15 @@ body {
   font-family: "Verdana";
 }
 
+.controls-img {
+  widows: 650px;
+}
+
 .logo-img {
   margin-top: 70px;
   margin-bottom: 70px;
   width: 350px;
 }
-
-/* canvas {
-  border: 1px solid red;
-} */
 
 .logo-img {
   width: 350px;
