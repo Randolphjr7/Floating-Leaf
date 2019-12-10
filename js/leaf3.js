@@ -96,7 +96,7 @@
     // check if it hits bottom
     hitBottom() {
       if((this.y + this.height) > (this.bottom)){
-         gameOver();
+         this.y = myCanvas.height - this.height;
       }
     }
     
@@ -133,7 +133,7 @@
     // move leaf left
 	  moveWeedLeft(){
       if(!this.hitLeft()){
-        this.x -= 50; 
+        this.x -= 100; 
       }
 
     }
@@ -141,7 +141,7 @@
     // move leaf right
     moveWeedRight(){
       if(!this.hitRight()){
-        this.x += 50;
+        this.x += 100;
       }
     }
 
@@ -211,7 +211,7 @@
     
     const up = e.keyCode;
     console.log("e.keycode is: ", up);
-    const jump = -.55;
+    const jump = -.60;
     
     // go vertical 
     if(up === 32){
